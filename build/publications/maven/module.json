@@ -1,0 +1,111 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "liyuan.user",
+    "module": "base-jwt-security",
+    "version": "1.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "base-jwt-security-1.0-SNAPSHOT.jar",
+          "url": "base-jwt-security-1.0-SNAPSHOT.jar",
+          "size": 30956,
+          "sha512": "cfce39256052564314116f0bb0934cb510f3876394eca5c02e197dbd53e537b7f45c5afa73f1a5c5d35b65fe815802d8a4940dbb869c5fa7bc7f9036299d589f",
+          "sha256": "11d253e22b651d85bdf84121a3d87d238ade722fcb9df0cc37b453e8bf17d6e5",
+          "sha1": "21aabcc428074976f52a63d7c75686938a8cdb6b",
+          "md5": "6fa31ebaf286c11b8a2093e784efd5e8"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-web",
+          "version": {
+            "requires": "2.3.2.RELEASE"
+          }
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-security",
+          "version": {
+            "requires": "2.3.2.RELEASE"
+          }
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-devtools",
+          "version": {
+            "requires": "2.3.2.RELEASE"
+          }
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-configuration-processor",
+          "version": {
+            "requires": "2.3.2.RELEASE"
+          }
+        },
+        {
+          "group": "com.alibaba",
+          "module": "fastjson",
+          "version": {
+            "requires": "1.2.73"
+          }
+        },
+        {
+          "group": "org.springframework.security",
+          "module": "spring-security-jwt",
+          "version": {
+            "requires": "1.0.11.RELEASE"
+          }
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-mail",
+          "version": {
+            "requires": "2.1.5.RELEASE"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "base-jwt-security-1.0-SNAPSHOT.jar",
+          "url": "base-jwt-security-1.0-SNAPSHOT.jar",
+          "size": 30956,
+          "sha512": "cfce39256052564314116f0bb0934cb510f3876394eca5c02e197dbd53e537b7f45c5afa73f1a5c5d35b65fe815802d8a4940dbb869c5fa7bc7f9036299d589f",
+          "sha256": "11d253e22b651d85bdf84121a3d87d238ade722fcb9df0cc37b453e8bf17d6e5",
+          "sha1": "21aabcc428074976f52a63d7c75686938a8cdb6b",
+          "md5": "6fa31ebaf286c11b8a2093e784efd5e8"
+        }
+      ]
+    }
+  ]
+}

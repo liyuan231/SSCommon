@@ -18,6 +18,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -35,7 +37,6 @@ import java.util.Arrays;
 public class SpringSecurityConfiguration {
 
     @Bean
-    @Primary
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -75,13 +76,16 @@ public class SpringSecurityConfiguration {
         @Autowired
         private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+        @Autowired
+        private UserDetailsService userDetailsService;
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
             http.cors();
             http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             http.csrf().disable()
-                    .antMatcher("/")
+                    .antMatcher("/**")
                     .authorizeRequests().anyRequest().permitAll()
                     .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                     .and()
