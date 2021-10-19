@@ -4,14 +4,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "jwt.config")
 public class JwtProperties {
-    private boolean enabled;
+    private boolean enabled = true;
     private String keyLocation;
     private String keyAlias;
     private String keyPass;
     private String issuer;
     private String subscriber;
-    private int tokenExpirationDays;
-    private int refreshTokenExpirationDays;
+    private int tokenExpirationDays = 10;
+    private int refreshTokenExpirationDays = 30;
 
     public boolean isEnabled() {
         return enabled;

@@ -21,10 +21,10 @@ public class SwaggerConfiguration {
     @Value("${swagger.enabled:true}")
     private Boolean enabled;
 
-    @Bean
-    public ApiInfo apiInfo() {
-        return (new ApiInfoBuilder()).title("xx1").description("xx2").version("v0.0.1").build();
-    }
+//    @Bean
+//    public ApiInfo apiInfo() {
+//        return (new ApiInfoBuilder()).title("接口文档").description("xx2").version("v0.0.1").build();
+//    }
 
     @Bean
     public Docket docket() {
@@ -32,11 +32,9 @@ public class SwaggerConfiguration {
         List<Parameter> parameters = new LinkedList<>();
         tokenPar.name("Authorization").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         parameters.add(tokenPar.build());
-        return new Docket(DocumentationType.SWAGGER_2).groupName("xx3")
-                .apiInfo(this.apiInfo())
+        return new Docket(DocumentationType.SWAGGER_2).groupName("Group-Name")
                 .enable(enabled)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example"))
                 .paths(PathSelectors.any()).build().globalOperationParameters(parameters);
     }
 }

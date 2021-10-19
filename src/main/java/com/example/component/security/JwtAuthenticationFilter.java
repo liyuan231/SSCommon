@@ -6,6 +6,7 @@ import com.example.component.jwt.JwtTokenGenerator;
 import com.example.exception.JwtTokenExpiredAuthenticationException;
 import com.example.exception.JwtTokenMissingAuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,6 +28,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Component
+@ConditionalOnProperty(prefix = "jwt.config", name = "enabled")
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHENTICATION_PREFIX = "Bearer ";
     private static final String AUTHORIZATION = "Authorization";

@@ -2,9 +2,9 @@ package com.example.component.security;
 
 import com.example.component.jwt.JwtTokenGenerator;
 import com.example.component.jwt.JwtTokenPair;
-import com.example.service.impl.UserDetailsServiceImpl;
 import com.example.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,12 +19,10 @@ import java.io.IOException;
 import java.util.*;
 
 @Component
+@ConditionalOnProperty(prefix = "jwt.config", name = "enabled")
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     private JwtTokenGenerator jwtTokenGenerator;
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

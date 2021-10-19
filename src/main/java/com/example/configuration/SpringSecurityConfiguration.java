@@ -6,6 +6,7 @@ import com.example.component.security.LoginSuccessHandler;
 import com.example.component.security.SimpleAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -39,12 +40,6 @@ public class SpringSecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//
-//    public PasswordEncoder passwordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-//    }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -60,14 +55,11 @@ public class SpringSecurityConfiguration {
 
     @Configuration
     @Order(1)
+    @ConditionalOnProperty(prefix = "jwt.config", name = "enabled")
     public static class UserSpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
         @Autowired(required = false)
         private AuthenticationEntryPoint authenticationEntryPoint;
-
-        @Autowired
-        @Qualifier("userDetailsServiceImpl")
-        private UserDetailsService userDetailsService;
-
         //        @Bean
 //        public SessionRegistry sessionRegistry() {
 //            return new SessionRegistryImpl();
@@ -85,104 +77,22 @@ public class SpringSecurityConfiguration {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.userDetailsService(userDetailsService);
             http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
             http.cors();
-//            http.antMatcher("/api/tagging/user/login").authorizeRequests().anyRequest().permitAll();
             http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             http.csrf().disable()
-                    .antMatcher("/api/tagging/**")
+                    .antMatcher("/")
                     .authorizeRequests().anyRequest().permitAll()
                     .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                     .and()
                     .formLogin()
                     .failureHandler(loginFailureHandler)
                     .successHandler(loginSuccessHandler)
-                    .loginProcessingUrl("/api/_tagging_/_user_/login")
+                    .loginProcessingUrl("/api/_user_/_login_")
                     .and()
-                    .logout().logoutUrl("/api/tagging/user/logout");
-//                    .and().sessionManagement()
-//                    .maximumSessions(1)
-//                    .expiredSessionStrategy(new SessionInformationExpiredStrategyImpl(userDetailsService));
+                    .logout().logoutUrl("/api/_user_/_logout_");
             http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                     .accessDeniedHandler(simpleAccessDeniedHandler);
         }
-
-        /**
-         * 当然监听session是否过期，首选这个方法
-         *
-         * @return
-         */
-//        private static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
-
-//        @Bean
-//        public HttpSessionListener httpSessionListener(TaggingIndonesianServiceImpl taggingService) {
-//
-//            return new HttpSessionListener() {
-//                @Override
-//                public void sessionCreated(HttpSessionEvent se) {
-//                    logger.info(se.getSession().getId() + " [SESSION CREATED]");
-//                }
-//
-//                @Override
-//                public void sessionDestroyed(HttpSessionEvent se) {
-//                    SecurityContextImpl securityContext = (SecurityContextImpl) se.getSession().getAttribute(SPRING_SECURITY_CONTEXT);
-//                    Authentication authentication = securityContext.getAuthentication();
-//                    User user = (User) authentication.getPrincipal();
-//                    TaggingUser u = userDetailsService.queryByUsername(user.getUsername(), TaggingUser.Column.id);
-//                    taggingService.clearUsingByUserId(u.getId());
-//                    logger.info(user.getUsername() + "[SESSION EXPIRED]");
-//                }
-//            };
-//        }
     }
-
-//
-//    @Configuration
-//    @Order(2)
-//    public static class AdminSpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
-//
-//
-//        @Autowired
-//        @Qualifier("adminServiceImpl")
-//        private AdminServiceImpl userDetailsService;
-//
-////        @Bean
-////        public SessionRegistry sessionRegistry() {
-////            return new SessionRegistryImpl();
-////        }
-//
-//        @Autowired
-//        private SimpleAuthenticationEntryPoint authenticationEntryPoint;
-//
-//        @Autowired
-//        private JwtAuthenticationFilter jwtAuthenticationFilter;
-//
-//        @Autowired
-//        private LoginFailureHandler loginFailureHandler;
-//        @Autowired
-//        private LoginSuccessHandler loginSuccessHandler;
-//
-//        @Autowired
-//        private SimpleAuthenticationEntryPoint simpleAuthenticationEntryPoint;
-//
-//        @Autowired
-//        private SimpleAccessDeniedHandler simpleAccessDeniedHandler;
-//
-//        @Override
-//        protected void configure(HttpSecurity http) throws Exception {
-//            http.userDetailsService(userDetailsService);
-//            http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//            http.cors();
-////            http.antMatcher("/api/tagging/user/login").authorizeRequests().anyRequest().permitAll();
-//            http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//            http.csrf().disable()
-//                    .formLogin()
-//                    .failureHandler(loginFailureHandler)
-//                    .successHandler(loginSuccessHandler)
-//                    .loginPage("/api/tagging/admin/login");
-//            http.exceptionHandling().authenticationEntryPoint(simpleAuthenticationEntryPoint)
-//                    .accessDeniedHandler(simpleAccessDeniedHandler);
-//        }
-//    }
 }
