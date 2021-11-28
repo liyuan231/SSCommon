@@ -1,9 +1,7 @@
 package com.example.exceptionHandler;
 
 import com.example.constants.UserStatusCode;
-import com.example.exception.DynamicCodeExpiredException;
-import com.example.exception.DynamicCodeInvalidException;
-import com.example.exception.UsernameAlreadyExistException;
+import com.example.exception.*;
 import com.example.utils.ResponseUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

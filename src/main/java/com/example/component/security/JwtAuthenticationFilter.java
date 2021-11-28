@@ -32,6 +32,7 @@ import java.util.LinkedList;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHENTICATION_PREFIX = "Bearer ";
     private static final String AUTHORIZATION = "Authorization";
+
     private AuthenticationEntryPoint authenticationEntryPoint;
 //    @Autowired
 //    private AuthorityServiceImpl authorityService;

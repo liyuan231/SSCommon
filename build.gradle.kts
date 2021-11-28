@@ -23,7 +23,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-configuration-processor:2.3.2.RELEASE")
     implementation("com.alibaba:fastjson:1.2.73")
     implementation("org.springframework.security:spring-security-jwt:1.0.11.RELEASE")
-    implementation("org.springframework.boot:spring-boot-starter-mail:2.1.5.RELEASE")
+//    implementation("org.springframework.boot:spring-boot-starter-mail:2.1.5.RELEASE")
 
     testImplementation("junit:junit:4.13")
 }
