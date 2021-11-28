@@ -85,3 +85,39 @@ public class UserServiceImpl implements UserDetailsService, RegisterOperation {
 需要在请求头处添加 Authorization: Bearer ${token}
 
 可使用SpringSecurity注解将在登录时注入的用户权限添加到接口上做访问限制；
+```java
+package com.example.controller;
+
+
+import com.example.constants.StatusCode;
+import com.example.service.CampusCodeServiceImpl;
+import com.example.utils.ResponseUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+
+@RestController
+@RequestMapping("${api.baseUri:/app/school-api}")
+public class IndexController {
+
+    @Autowired
+    private CampusCodeServiceImpl campusCodeService;
+
+    @GetMapping(value = "/campus-code", produces = {"application/json;charset=utf-8"})
+    @PreAuthorize("hasAuthority('user:scan')")
+    public String campusCode(@RequestParam("auth_code") String authCode, HttpServletRequest request) {
+        return ResponseUtils.build(StatusCode.SUCCESS, "resolve success", campusCodeService.decodeQrCode(authCode,request));
+    }
+
+    @GetMapping(value = "records", produces = {"application/json;charset=utf-8"})
+    @PreAuthorize("hasAuthority('user:records')")
+    public String records(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        return ResponseUtils.build(StatusCode.SUCCESS, "get records success", campusCodeService.records(page, pageSize));
+    }
+}
+
+
+```
+
