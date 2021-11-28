@@ -1,7 +1,7 @@
 ## 基于 Spring Security的JWT通用后台安全框架
 前言：每次使用SS框架时，总要重新书写JWT部分，因此我将其抽取出来了
 
-## 使用
+## 开始使用
 使用gradle将其打包供其他项目使用
 ./gradlew build
 
@@ -80,3 +80,8 @@ public class UserServiceImpl implements UserDetailsService, RegisterOperation {
 
 ```
 
+## 权限校验
+登录成功会返回token
+需要在请求头处添加 Authorization: Bearer ${token}
+
+可使用SpringSecurity注解将在登录时注入的用户权限添加到接口上做访问限制；
