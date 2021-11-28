@@ -11,10 +11,72 @@
 UserDetailsService（登录时用户从哪获取）, RegisterOperation（注册或修改用户账号密码） 接口
 默认使用内存保存用户
 
-默认登录
-http://localhost:80/login?username=xxx&password=xxx
 
-默认注册
-http://localhost:80/register?username=xxx&password=xxx
+默认注册登录都使用内存
 
+|操作|接口|
+|----|----|
+|默认登录|http://localhost:80/login?username=xxx&password=xxx 需要自行实现 UserDetailsService接口，该接口与登录相关|
+|默认注册|http://localhost:80/register?username=xxx&password=xxx 需自行实现 RegisterOperation 接口，该接口有注册时相关操作|
+|默认修改密码 |http://localhost:80/register?username=xxx&password=xxx&code=xxx 需自行实现 RegisterOperation 接口，该接口有修改密码时验证码的操作|
+
+可参考如下实现
+```java
+package com.example.service;
+
+import com.example.dao.UserDao;
+import com.example.exception.DynamicCodeInvalidException;
+import com.example.pojo.User;
+import com.example.utils.PermissionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Objects;
+
+@Service
+@Primary
+public class UserServiceImpl implements UserDetailsService, RegisterOperation {
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        List<User> users = userDao.queryByUsername(username);
+        if (CollectionUtils.isEmpty(users)) {
+            throw new UsernameNotFoundException("username not exist");
+        }
+        User user = users.get(0);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), PermissionUtils.convert(PermissionUtils.teacher()));
+    }
+
+    @Override
+    public void registerOrRestPassword(String username, String password, String code) throws DynamicCodeInvalidException {
+        //TODO 不晓得是邮箱，还是手机号，还是啥
+        if (!code.equalsIgnoreCase("666666")) {
+            throw new DynamicCodeInvalidException("code invalid!");
+        }
+        String encodedPassword = passwordEncoder.encode(password);
+        try {
+            UserDetails user = loadUserByUsername(username);
+        } catch (UsernameNotFoundException e) {
+            User savedUser = userDao.save(new User(username, encodedPassword));
+            return;
+        }
+        userDao.updatePassword(username, encodedPassword);
+    }
+}
+
+
+```
 
